@@ -12,11 +12,13 @@ namespace Photogram.Models
         [Required]
         public string? Name { get; set; }
         [Required]
-        public int Password { get; set; }
+        public string Password { get; set; }
         [Required]
         public string? Email { get; set; }
         [Required]
         public bool IsBanned { get; set; }
+        public Photos? MainPhoto { get; set; }
+        public virtual List<Photos>? Photos { get; set; }
         [Required]
         public UserType Role {get;set;} 
 

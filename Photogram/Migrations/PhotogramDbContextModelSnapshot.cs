@@ -56,7 +56,12 @@ namespace Photogram.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UsersId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UsersId");
 
                     b.ToTable("Photos");
                 });
@@ -123,17 +128,23 @@ namespace Photogram.Migrations
                     b.Property<bool>("IsBanned")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("MainPhotoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Password")
-                        .HasColumnType("int");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MainPhotoId");
 
                     b.ToTable("Users");
                 });
@@ -143,6 +154,13 @@ namespace Photogram.Migrations
                     b.HasOne("Photogram.Models.Photos", null)
                         .WithMany("Comments")
                         .HasForeignKey("PhotosId");
+                });
+
+            modelBuilder.Entity("Photogram.Models.Photos", b =>
+                {
+                    b.HasOne("Photogram.Models.Users", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("UsersId");
                 });
 
             modelBuilder.Entity("Photogram.Models.Reactions", b =>
@@ -167,11 +185,25 @@ namespace Photogram.Migrations
                     b.Navigation("Photo");
                 });
 
+            modelBuilder.Entity("Photogram.Models.Users", b =>
+                {
+                    b.HasOne("Photogram.Models.Photos", "MainPhoto")
+                        .WithMany()
+                        .HasForeignKey("MainPhotoId");
+
+                    b.Navigation("MainPhoto");
+                });
+
             modelBuilder.Entity("Photogram.Models.Photos", b =>
                 {
                     b.Navigation("Comments");
 
                     b.Navigation("Reactions");
+                });
+
+            modelBuilder.Entity("Photogram.Models.Users", b =>
+                {
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

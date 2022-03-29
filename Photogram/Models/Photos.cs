@@ -9,9 +9,7 @@ namespace Photogram.Models
         public int Id { get; set; }
         [Required]
         public string? PhotoUrl { get; set; }
-        [Required]
         public virtual List<Comments>? Comments { get; set; }
-        [Required]
         public virtual List<Reactions>? Reactions { get; set; }
     }
 }

@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Photogram;
+using Photogram.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IPhotogramRepo, PhotogramRepo>();
 builder.Services.AddDbContext<PhotogramDbContext>(p=>p.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
