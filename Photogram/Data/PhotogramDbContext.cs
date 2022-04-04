@@ -9,10 +9,10 @@ namespace Photogram
         {
                     
         }
-        public DbSet<Comments>? Comments { get; set; }
-        public DbSet<Photos>? Photos { get; set; }
-        public DbSet<Reactions>? Reactions { get; set; }
-        public DbSet<Reports>? Reports { get; set; }
-        public DbSet<Users>? Users { get; set; }
+        public DbSet<Comments> Comments { get; set; }
+        public DbSet<Photos> Photos { get; set; }
+        public DbSet<Reactions> Reactions { get; set; }
+        public DbSet<Reports> Reports { get; set; }
+        public DbSet<Users> Users { get; set; }
     }
 }

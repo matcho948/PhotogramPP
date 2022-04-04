@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Photogram.Models
 {
-
     public class Users
     {
         [Key]
@@ -17,14 +16,12 @@ namespace Photogram.Models
         public string? Email { get; set; }
         [Required]
         public bool IsBanned { get; set; }
-        public Photos? MainPhoto { get; set; }
         public virtual List<Photos>? Photos { get; set; }
         [Required]
-        public UserType Role {get;set;} 
-
-       public enum UserType
+        public UserType Role { get; set; }
+        public enum UserType
         {
-          User,Administrator
+            User, Administrator
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Photogram.Controllers
             _repo = repo;
         }
         [HttpGet("/GetAllUsers")]
-        public ActionResult<IEnumerable<Users>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<Users>>> GetAllUsers()
         {
             var users = _repo.GetAllUsers();
             if (users == null)
@@ -21,7 +21,7 @@ namespace Photogram.Controllers
             return Ok(users);
         }
         [HttpGet("/GetUserById/{id}", Name = "GetUserById")]
-        public ActionResult<Users> GetUserById(int id)
+        public async Task<ActionResult<Users>> GetUserById(int id)
         {
             var user = _repo.GetUserById(id);
             if (user == null)
@@ -29,15 +29,23 @@ namespace Photogram.Controllers
             return Ok(user);
         }
         [HttpPost("/AddNewUser")]
-        public ActionResult AddNewUser([FromBody]Users user)
+        public async Task<ActionResult> AddNewUser([FromBody]Users user)
         {
             if (user == null)
                 return NoContent();
             _repo.AddNewUser(user);
             return CreatedAtRoute(nameof(GetUserById), new { Id = user.Id }, user);
         }
+        [HttpGet("/CheckLoginData/{name}/{password}")]
+        public async Task<ActionResult<Users>> CheckLoginData(string name,string password)
+        {
+            var user = _repo.CheckLoginData(name, password);
+            if (user == null)
+                return NotFound();
+            return Ok(user);
+        }
         [HttpDelete("/DeleteUser/{id}")]
-        public ActionResult DeleteUser(int id)
+        public async Task<ActionResult> DeleteUser(int id)
         {
             var user = _repo.GetUserById(id);
             if (user == null)

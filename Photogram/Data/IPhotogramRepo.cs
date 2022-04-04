@@ -6,7 +6,8 @@ namespace Photogram.Data
     {
         public IEnumerable<Users> GetAllUsers();
         public Users GetUserById(int id);
-        public void DeleteUser(int id);
-        public void AddNewUser(Users user);
+        public Task DeleteUser(int id);
+        public Task AddNewUser(Users user);
+        public Users CheckLoginData(string name, string password);
     }
 }

@@ -128,9 +128,6 @@ namespace Photogram.Migrations
                     b.Property<bool>("IsBanned")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MainPhotoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -143,8 +140,6 @@ namespace Photogram.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MainPhotoId");
 
                     b.ToTable("Users");
                 });
@@ -183,15 +178,6 @@ namespace Photogram.Migrations
                     b.Navigation("Comment");
 
                     b.Navigation("Photo");
-                });
-
-            modelBuilder.Entity("Photogram.Models.Users", b =>
-                {
-                    b.HasOne("Photogram.Models.Photos", "MainPhoto")
-                        .WithMany()
-                        .HasForeignKey("MainPhotoId");
-
-                    b.Navigation("MainPhoto");
                 });
 
             modelBuilder.Entity("Photogram.Models.Photos", b =>

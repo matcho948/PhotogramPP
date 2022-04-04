@@ -10,21 +10,27 @@ namespace Photogram.Data
             _context = context;
         }
 
-        public void AddNewUser(Users user)
+        public async Task AddNewUser(Users user)
         {
           if(user == null)
                 throw new ArgumentNullException(nameof(Users));
-          _context.Users.Add(user);
+          await _context.Users.AddAsync(user);
           _context.SaveChanges();
         }
 
-        public void DeleteUser(int id)
+        public Users CheckLoginData(string name, string password)
         {
-            var user = _context.Users.FirstOrDefault(p => p.Id == id);
+          var user = _context.Users.FirstOrDefault(p => p.Name == name && p.Password == password);
+          return user;
+        }
+
+        public async Task DeleteUser(int id)
+        {
+            var user =  _context.Users.FirstOrDefault(p => p.Id == id);
             if (user != null)
             {
-                _context.Users.Remove(user);
-                _context.SaveChanges();
+               _context.Users.Remove(user);
+               await _context.SaveChangesAsync();
             }
         }
 
