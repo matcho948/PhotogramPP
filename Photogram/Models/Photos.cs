@@ -8,8 +8,18 @@ namespace Photogram.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public string? PhotoUrl { get; set; }
+        public string PhotoUrl { get; set; }
+        public bool IsMainPhoto { get; set; }
         public virtual List<Comments>? Comments { get; set; }
         public virtual List<Reactions>? Reactions { get; set; }
+        public Photos(string url)
+        {
+            PhotoUrl = url;
+            IsMainPhoto = false;
+        }
+        public Photos()
+        {
+
+        }
     }
 }

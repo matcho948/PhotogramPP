@@ -18,6 +18,14 @@ namespace Photogram.Data
           _context.SaveChanges();
         }
 
+        public bool CheckIfUserExistInDatabase(Users user)
+        {
+            var searchedUser =  _context.Users.Where(p => p.Name == user.Name || p.Email == user.Email).FirstOrDefault();
+            if (searchedUser == null)
+              return false;
+            return true;
+        }
+
         public Users CheckLoginData(string name, string password)
         {
           var user = _context.Users.FirstOrDefault(p => p.Name == name && p.Password == password);

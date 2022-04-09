@@ -31,9 +31,9 @@ namespace Photogram.Controllers
         [HttpPost("/AddNewUser")]
         public async Task<ActionResult> AddNewUser([FromBody]Users user)
         {
-            if (user == null)
+            if (user == null || _repo.CheckIfUserExistInDatabase(user))
                 return NoContent();
-            _repo.AddNewUser(user);
+            await _repo.AddNewUser(user);
             return CreatedAtRoute(nameof(GetUserById), new { Id = user.Id }, user);
         }
         [HttpGet("/CheckLoginData/{name}/{password}")]
@@ -50,7 +50,7 @@ namespace Photogram.Controllers
             var user = _repo.GetUserById(id);
             if (user == null)
                 return NotFound();
-            _repo.DeleteUser(id);
+            await _repo.DeleteUser(id);
             return Ok();
         }
     }
