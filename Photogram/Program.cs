@@ -3,7 +3,7 @@ using Photogram;
 using Photogram.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var MyAllowSpecificOrgins = "_myAllowSpecificOrigins";
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -12,6 +12,15 @@ builder.Services.AddDbContext<PhotogramDbContext>(p=>p.UseSqlServer(builder.Conf
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(p =>
+{
+    p.AddPolicy(name: MyAllowSpecificOrgins, g =>
+    {
+        g.AllowAnyOrigin();
+        g.AllowAnyHeader();
+        g.AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -23,7 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
+app.UseCors(MyAllowSpecificOrgins);
 app.MapControllers();
 
 app.Run();
