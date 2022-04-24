@@ -29,10 +29,5 @@ namespace Photogram.Controllers
                 return BadRequest();
             return Ok(photos);
         }
-        [HttpPost("/AddNewPhoto")]
-        public async Task <ActionResult> AddNewPhoto()
-        {
-            
-        }
     }
 }
