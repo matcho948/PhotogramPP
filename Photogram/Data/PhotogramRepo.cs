@@ -1,4 +1,5 @@
-﻿using Photogram.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Photogram.Models;
 
 namespace Photogram.Data
 {
@@ -52,5 +53,14 @@ namespace Photogram.Data
             return _context.Users.FirstOrDefault(p => p.Id == id);
         }
 
+        public IEnumerable<Photos> GetAllPhotos()
+        {
+            return _context.Photos.ToList();
+        }
+        public Users GetUserWithPhotosById(int id)
+        {
+            return _context.Users.AsNoTracking().Include(p => p.Photos).FirstOrDefault(p => p.Id == id);
+        }
+       
     }
 }
