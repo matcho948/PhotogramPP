@@ -10,5 +10,6 @@ namespace Photogram.Data
         public Task AddNewUser(Users user);
         public bool CheckIfUserExistInDatabase(Users user);
         public Users CheckLoginData(string name, string password);
+        public string? GenerateToken(string name, string password);
     }
 }
