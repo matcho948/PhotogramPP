@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Photogram.Data;
 using Photogram.Models;
 
 namespace Photogram.Controllers
 {
     [ApiController]
+    //[Authorize]
     public class UserController :ControllerBase
     {
         private readonly IPhotogramRepo _repo;
@@ -28,22 +30,17 @@ namespace Photogram.Controllers
                 return NotFound();
             return Ok(user);
         }
-        [HttpPost("/AddNewUser")]
-        public async Task<ActionResult> AddNewUser([FromBody]Users user)
-        {
-            if (user == null || _repo.CheckIfUserExistInDatabase(user))
-                return NoContent();
-            await _repo.AddNewUser(user);
-            return CreatedAtRoute(nameof(GetUserById), new { Id = user.Id }, user);
-        }
-        [HttpGet("/CheckLoginData/{name}/{password}")]
-        public async Task<ActionResult<Users>> CheckLoginData(string name,string password)
-        {
-            var user = _repo.CheckLoginData(name, password);
-            if (user == null)
-                return NotFound();
-            return Ok(user);
-        }
+       
+        // After password hashing, this endpoint not works properly
+        //[HttpGet("/CheckLoginData/{name}/{password}")]
+        //public async Task<ActionResult<Users>> CheckLoginData(string name,string password)
+        //{
+        //    var user = _repo.CheckLoginData(name, password);
+        //    if (user == null)
+        //        return NotFound();
+        //    return Ok(user);
+        //}
+
         [HttpDelete("/DeleteUser/{id}")]
         public async Task<ActionResult> DeleteUser(int id)
         {
