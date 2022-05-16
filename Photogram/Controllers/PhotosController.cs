@@ -29,5 +29,79 @@ namespace Photogram.Controllers
                 return BadRequest();
             return Ok(photos);
         }
+        [HttpGet("/GetPhotoById/{id}")]
+        public async Task<ActionResult<Photos>> GetPhotoById(int id)
+        {
+            var photo = _repo.getPhotoById(id);
+            if (photo == null)
+                return BadRequest();
+            return Ok(photo.PhotoUrl);
+        }
+        [HttpPost("/AddNewPhoto/{URL}")]
+        public async Task<ActionResult> AddNewPhoto([FromBody] String URL)
+        {
+            int userId = 1;
+            try
+            {
+                if (URL == null)
+                    return BadRequest();
+                var photo = new Photos(URL);
+                await _repo.addNewPhoto(userId, photo);
+                return Ok(photo);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPatch("/SetProfilePhoto/{id}")]
+        public async Task<ActionResult> SetProfilePhoto([FromBody] int id)
+        {
+            try
+            {
+                if (id == null)
+                    return BadRequest();
+
+                var photo = _repo.getPhotoById(id);
+                _repo.setProfilePhoto(photo);
+                return Ok(photo);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPatch("/DeleteProfilePhoto/{id}")]
+        public async Task<ActionResult> DeleteProfilePhoto([FromBody] int id)
+        {
+            try
+            {
+                if (id == null)
+                    return BadRequest();
+
+                var photo = _repo.getPhotoById(id);
+                _repo.deleteProfilePhoto(photo);
+                return Ok(photo);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("/DeletePhoto/{id}")]
+        public async Task<ActionResult> DeletePhoto([FromBody] int id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var photo = _repo.getPhotoById(id);
+            _repo.deletePhoto(photo);
+            return Ok();
+
+            
+        }
     }
+
 }

@@ -13,6 +13,11 @@ namespace Photogram.Data
         public IEnumerable<Photos> GetAllPhotos();
         public Users GetUserWithPhotosById(int id);
         public string? GenerateToken(string name, string password);
+        public Photos getPhotoById(int id);
+        public Task addNewPhoto(int userId, Photos photo);
+        public Task setProfilePhoto(Photos photo);
+        public Task deleteProfilePhoto(Photos photo);
+        public Task deletePhoto(Photos photo);
 
     }
 }

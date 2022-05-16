@@ -106,6 +106,46 @@ namespace Photogram.Data
         {
             return _context.Users.AsNoTracking().Include(p => p.Photos).FirstOrDefault(p => p.Id == id);
         }
-       
+        public Photos getPhotoById(int id)
+        {
+            return _context.Photos.FirstOrDefault(p =>p.Id == id); 
+        }
+        public async Task addNewPhoto(int userId, Photos photo)
+        {
+            if (photo == null)
+                throw new ArgumentNullException(nameof(Photos));
+
+            var user = GetUserWithPhotosById(userId);
+            user.Photos.Add(photo);
+            _context.Photos.Add(photo);
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
+        public async Task setProfilePhoto(Photos photo)
+        {
+            if (photo == null)
+                throw new ArgumentNullException(nameof(Photos));
+            photo.IsMainPhoto = true;
+            _context.Update(photo);
+            _context.SaveChanges();
+        }
+        public async Task deleteProfilePhoto(Photos photo)
+        {
+            if (photo == null)
+                throw new ArgumentNullException(nameof(Photos));
+            photo.IsMainPhoto = false;
+            _context.Update(photo);
+            _context.SaveChanges();
+        }
+        public async Task deletePhoto(Photos photo)
+        {
+            if (photo != null)
+            {
+                _context.Photos.Remove(photo);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
     }
 }
