@@ -1,9 +1,13 @@
+
+﻿using Microsoft.EntityFrameworkCore;
+using Photogram.Models;
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Photogram.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
 
 namespace Photogram.Data
 {
@@ -94,5 +98,14 @@ namespace Photogram.Data
             return _context.Users.FirstOrDefault(p => p.Id == id);
         }
 
+        public IEnumerable<Photos> GetAllPhotos()
+        {
+            return _context.Photos.ToList();
+        }
+        public Users GetUserWithPhotosById(int id)
+        {
+            return _context.Users.AsNoTracking().Include(p => p.Photos).FirstOrDefault(p => p.Id == id);
+        }
+       
     }
 }

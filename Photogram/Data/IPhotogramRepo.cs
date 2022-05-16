@@ -1,4 +1,4 @@
-﻿using Photogram.Models;
+using Photogram.Models;
 
 namespace Photogram.Data
 {
@@ -10,6 +10,9 @@ namespace Photogram.Data
         public Task AddNewUser(Users user);
         public bool CheckIfUserExistInDatabase(Users user);
         public Users CheckLoginData(string name, string password);
+        public IEnumerable<Photos> GetAllPhotos();
+        public Users GetUserWithPhotosById(int id);
         public string? GenerateToken(string name, string password);
+
     }
 }
