@@ -21,6 +21,15 @@ namespace Photogram.Data
                        context.AddFailure("Email", "That email is taken");
                    }
                });
+            RuleFor(x => x.Name)
+              .Custom((value, context) =>
+              {
+                  var nameInUse = dbcontext.Users.Any(u => u.Name == value);
+                  if (nameInUse)
+                  {
+                      context.AddFailure("Name", "That username is taken");
+                  }
+              });
         }
     }
 }
