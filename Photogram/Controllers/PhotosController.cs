@@ -37,10 +37,9 @@ namespace Photogram.Controllers
                 return BadRequest();
             return Ok(photo.PhotoUrl);
         }
-        [HttpPost("/AddNewPhoto/{URL}")]
-        public async Task<ActionResult> AddNewPhoto([FromBody] String URL)
+        [HttpPost("AddNewPhoto")]
+        public async Task<ActionResult> AddNewPhoto(String URL, int userId)
         {
-            int userId = 1;
             try
             {
                 if (URL == null)
