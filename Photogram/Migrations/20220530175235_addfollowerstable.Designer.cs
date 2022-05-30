@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Photogram;
 
@@ -11,9 +12,10 @@ using Photogram;
 namespace Photogram.Migrations
 {
     [DbContext(typeof(PhotogramDbContext))]
-    partial class PhotogramDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220530175235_addfollowerstable")]
+    partial class addfollowerstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -38,13 +38,13 @@ namespace Photogram.Controllers
             return Ok(photo.PhotoUrl);
         }
         [HttpPost("AddNewPhoto")]
-        public async Task<ActionResult> AddNewPhoto(String URL, int userId)
+        public async Task<ActionResult> AddNewPhoto(String URL, int userId,string description)
         {
             try
             {
                 if (URL == null)
                     return BadRequest();
-                var photo = new Photos(URL);
+                var photo = new Photos(URL,description);
                 await _repo.addNewPhoto(userId, photo);
                 return Ok(photo);
             }

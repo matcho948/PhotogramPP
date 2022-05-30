@@ -95,7 +95,7 @@ namespace Photogram.Data
 
         public Users GetUserById(int id)
         {
-            return _context.Users.FirstOrDefault(p => p.Id == id);
+            return _context.Users.Include(p => p.Followers).FirstOrDefault(p => p.Id == id);
         }
 
         public IEnumerable<Photos> GetAllPhotos()
@@ -146,6 +146,29 @@ namespace Photogram.Data
             }
         }
 
+        public async Task addFollower(Users user, Users follower)
+        {
+            if (user != null && follower != null)
+                user.Followers.Add(follower);
+            await _context.SaveChangesAsync();
+        }
 
+        public Users GetFollowersList(int userId)
+        {
+            return  _context.Users.Include(p => p.Followers).FirstOrDefault(p => p.Id == userId);
+        }
+
+        public async Task<List<Users>> GetFolloweredUsers(int userId)
+        {
+            List<Users> followeredUsers = new List<Users>();
+            var users = await _context.Users.Include(p=>p.Followers).ToListAsync();
+            foreach(var user in users)
+            {
+               var followered = user.Followers.FirstOrDefault(p => p.Id == userId);
+                if (followered != null)
+                    followeredUsers.Add(user);
+            }
+            return followeredUsers;
+        }
     }
 }
