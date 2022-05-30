@@ -30,7 +30,7 @@ namespace Photogram.Controllers
                 return NotFound();
             return Ok(user);
         }
-       
+
         // After password hashing, this endpoint not works properly
         //[HttpGet("/CheckLoginData/{name}/{password}")]
         //public async Task<ActionResult<Users>> CheckLoginData(string name,string password)
@@ -40,6 +40,14 @@ namespace Photogram.Controllers
         //        return NotFound();
         //    return Ok(user);
         //}
+        [HttpGet("/GetUserByPhotoId/{photoId}")]
+        public async Task<ActionResult<Users>> getUserByPhotoId(int photoId)
+        {
+            var user = _repo.getUserByPhotoId(photoId);
+            if (user == null)
+                return NotFound();
+            return Ok(user);
+        }
 
         [HttpDelete("/DeleteUser/{id}")]
         public async Task<ActionResult> DeleteUser(int id)
