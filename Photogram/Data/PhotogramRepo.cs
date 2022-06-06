@@ -90,7 +90,7 @@ namespace Photogram.Data
 
         public IEnumerable<Users> GetAllUsers()
         {
-            return _context.Users.ToList();
+            return _context.Users.AsNoTracking().Include(p=>p.Photos).ToList();
         }
 
         public Users GetUserById(int id)
@@ -169,6 +169,20 @@ namespace Photogram.Data
                     followeredUsers.Add(user);
             }
             return followeredUsers;
+        }
+        public Users getUserByPhotoId(int photoId)
+        {
+            var users = GetAllUsers();
+            Users user = null;
+            foreach(Users u in users)
+            {
+                foreach(Photos p in u.Photos)
+                {
+                    if (p.Id == photoId)
+                        user = u;
+                }
+            }
+            return user;
         }
     }
 }
