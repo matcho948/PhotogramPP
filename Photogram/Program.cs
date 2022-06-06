@@ -32,7 +32,9 @@ builder.Services.AddAuthentication(option =>
     };
 });
 
-builder.Services.AddControllers().AddFluentValidation();
+builder.Services.AddControllers().AddFluentValidation().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 builder.Services.AddScoped<IValidator<Users>, RegisterValidator>();
 builder.Services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddScoped<IPhotogramRepo, PhotogramRepo>();
