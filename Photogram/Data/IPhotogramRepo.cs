@@ -22,6 +22,9 @@ namespace Photogram.Data
         public Users GetFollowersList(int userId);
         public Task<List<Users>> GetFolloweredUsers(int userId);
         public Users getUserByPhotoId(int photoId);
+        public Task ChangeUserName(int userId, string username);
+        public Task ChangePassword(int userId, string password); 
+        public Task ChangeEmail(int userId, string email);
 
     }
 }
