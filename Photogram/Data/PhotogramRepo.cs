@@ -137,12 +137,13 @@ namespace Photogram.Data
             _context.Update(photo);
             _context.SaveChanges();
         }
-        public async Task deletePhoto(Photos photo)
+        public async Task deletePhoto(int id)
         {
+            var photo = _context.Photos.FirstOrDefault(p => p.Id == id);
             if (photo != null)
             {
                 _context.Photos.Remove(photo);
-                await _context.SaveChangesAsync();
+                _context.SaveChangesAsync();
             }
         }
 

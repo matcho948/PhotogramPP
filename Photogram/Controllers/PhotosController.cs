@@ -54,7 +54,7 @@ namespace Photogram.Controllers
             }
         }
         [HttpPatch("/SetProfilePhoto/{id}")]
-        public async Task<ActionResult> SetProfilePhoto([FromBody] int id)
+        public async Task<ActionResult> SetProfilePhoto(int id)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Photogram.Controllers
             }
         }
         [HttpPatch("/DeleteProfilePhoto/{id}")]
-        public async Task<ActionResult> DeleteProfilePhoto([FromBody] int id)
+        public async Task<ActionResult> DeleteProfilePhoto(int id)
         {
             try
             {
@@ -90,16 +90,31 @@ namespace Photogram.Controllers
             }
         }
         [HttpDelete("/DeletePhoto/{id}")]
-        public async Task<ActionResult> DeletePhoto([FromBody] int id)
+        public async Task<ActionResult> DeletePhoto(int id)
         {
             if (id == null)
                 return NotFound();
-
-            var photo = _repo.getPhotoById(id);
-            _repo.deletePhoto(photo);
+            _repo.deletePhoto(id);
             return Ok();
 
-            
+
+        }
+        [HttpGet("/GetProfilePhoto/{id}")]
+        public async Task<ActionResult> GetProfilePhoto(int id)
+        {
+            if (id == null)
+                return BadRequest();
+            else
+            {
+                var user = _repo.GetUserWithPhotosById(id);
+                foreach(Photos photo in user.Photos)
+                {
+                    if(photo.IsMainPhoto == true)
+                        return Ok(photo);
+
+                }
+                return NotFound();
+            }
         }
     }
 

@@ -17,7 +17,7 @@ namespace Photogram.Data
         public Task addNewPhoto(int userId, Photos photo);
         public Task setProfilePhoto(Photos photo);
         public Task deleteProfilePhoto(Photos photo);
-        public Task deletePhoto(Photos photo);
+        public Task deletePhoto(int id);
         public Task addFollower(Users user, Users follower);
         public Users GetFollowersList(int userId);
         public Task<List<Users>> GetFolloweredUsers(int userId);
