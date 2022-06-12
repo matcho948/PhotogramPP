@@ -117,6 +117,31 @@ namespace Photogram.Controllers
                 return NotFound();
             }
         }
+        [HttpGet("/GetRecomendedPhotos")]
+        public async Task<ActionResult<List<Photos>>> getRecomendedPhotos()
+        {
+            var idList = new List<int>();
+            var numberOfPhotos = _repo.getNumberOfPhotos();
+            Random random = new Random();
+            var photos = new List<Photos>();
+            if (numberOfPhotos < 20)
+                photos = _repo.GetAllPhotos().ToList();
+            else
+            {
+                while (photos.Count < 20)
+                {
+                    var id = random.Next(numberOfPhotos);
+                    if (!idList.Contains(id))
+                    {
+                        var photo = _repo.getPhotoById(id);
+                        if (photo != null)
+                            photos.Add(photo);
+                    }
+                    idList.Add(id);
+                }
+            }
+            return Ok(photos);
+        }
     }
 
 }

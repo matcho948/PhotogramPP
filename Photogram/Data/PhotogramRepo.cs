@@ -254,5 +254,13 @@ namespace Photogram.Data
             user.Password = _hasher.HashPassword(user, user.Password);
             await _context.SaveChangesAsync();
         }
+        public int getNumberOfUsers()
+        {
+            return _context.Users.Count();
+        }
+        public int getNumberOfPhotos()
+        {
+            return _context.Photos.Count();
+        }
     }
 }
