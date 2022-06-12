@@ -35,6 +35,16 @@ namespace Photogram.Data
             }
         }
 
+        public async Task<int> CountFollowers(int userId)
+        {
+            var user = await _context.Users.Include(p=>p.Followers).FirstOrDefaultAsync(p=>p.Id == userId);
+            if (user != null)
+            {
+                return user.Followers.Count();
+            }
+            return 0;
+        }
+
         public async Task DeleteCommentById(int photoId, int commentId)
         {
             var photo = await _context.Photos.Where(p => p.Id == photoId).Include(p => p.Comments).FirstOrDefaultAsync();

@@ -8,9 +8,11 @@ namespace Photogram.Controllers
     public class FollowersController : ControllerBase
     {
         private readonly IPhotogramRepo _repo;
-        public FollowersController(IPhotogramRepo repo)
+        private readonly IPhotosRepo _photoRepo;
+        public FollowersController(IPhotogramRepo repo, IPhotosRepo photoRepo)
         {
             _repo = repo;
+            _photoRepo = photoRepo;
         }
         //user id id usera, którego ktoś chce obserwować
         // follower id user, który kogoś zaobserwował
@@ -32,6 +34,14 @@ namespace Photogram.Controllers
                 return NotFound();
             var followers = await  _repo.GetFollowersList(userId);
             return Ok(followers);
+        }
+        [HttpGet("/GetAmountOfFollowers/{userId}")]
+        public async Task<ActionResult<int>> GetAmountOfFollowers(int userId)
+        {
+            if (userId == null)
+                return NotFound();
+            var amount = await _photoRepo.CountFollowers(userId);
+            return Ok(amount);
         }
         [HttpGet("/GetUsersFolloweredByUser/{userId}")]
         public async Task<ActionResult<List<Users>>> GetUsersFolloweredByUser(int userId)
