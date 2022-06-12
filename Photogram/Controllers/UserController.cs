@@ -125,5 +125,19 @@ namespace Photogram.Controllers
             return Ok(users);
         }
 
+        [HttpGet("/SearchUser")]
+        public async Task<ActionResult<List<Users>>> SearchUser(string username)
+        {
+            List<Users> users = new();
+            try
+            {
+                users = _repo.SearchUsers(username);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(users);
+        }
     }
 }
