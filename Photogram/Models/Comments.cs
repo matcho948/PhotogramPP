@@ -10,6 +10,8 @@ namespace Photogram.Models
         [Required]
         public string? Name { get; set; }
         [Required]
-        public int idUser  { get; set; }
+        public int IdUser  { get; set; }
+        [Required]
+        public string UserName{ get; set; }
     }
 }

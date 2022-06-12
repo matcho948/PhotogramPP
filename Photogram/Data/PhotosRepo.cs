@@ -66,15 +66,23 @@ namespace Photogram.Data
         public async Task<List<Comments>> GetAllCommentsByPhotoId(int photoId)
         {
             var photo = await _context.Photos.Where(p => p.Id == photoId).Include(p => p.Comments).FirstOrDefaultAsync();
-            var comments = photo.Comments.ToList();
-            return comments;
+            if (photo != null)
+            {
+                var comments = photo.Comments.ToList();
+                return comments;
+            }
+            return null;
         }
 
         public async Task<List<Reactions>> GetAllReactionsByPhotoId(int photoId)
         {
             var photo = await _context.Photos.Where(p => p.Id == photoId).Include(p => p.Reactions).FirstOrDefaultAsync();
-            var reactions = photo.Reactions.ToList();
-            return reactions;
+            if (photo != null)
+            {
+                var reactions = photo.Reactions.ToList();
+                return reactions;
+            }
+            return null;
 
         }
     }
