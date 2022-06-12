@@ -137,13 +137,25 @@ namespace Photogram.Data
             _context.Update(photo);
             _context.SaveChanges();
         }
-        public async Task deletePhoto(int id)
+
+        public Photos getPhotoToDeleteById(int id)
         {
-            var photo = _context.Photos.FirstOrDefault(p => p.Id == id);
+            return _context.Photos.Include(p => p.Comments).Include(p => p.Reactions).FirstOrDefault(p => p.Id == id);
+        }
+        public async Task deletePhoto(Photos photo)
+        {
             if (photo != null)
             {
+                foreach (var c in photo.Comments)
+                {
+                    _context.Comments.Remove(c);
+                }
+                foreach (var r in photo.Reactions)
+                {
+                    _context.Reactions.Remove(r);
+                }
                 _context.Photos.Remove(photo);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

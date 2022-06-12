@@ -94,7 +94,8 @@ namespace Photogram.Controllers
         {
             if (id == null)
                 return NotFound();
-            _repo.deletePhoto(id);
+            var photo = _repo.getPhotoToDeleteById(id);
+            _repo.deletePhoto(photo);
             return Ok();
 
 
@@ -110,7 +111,7 @@ namespace Photogram.Controllers
                 foreach(Photos photo in user.Photos)
                 {
                     if(photo.IsMainPhoto == true)
-                        return Ok(photo);
+                        return Ok(photo.PhotoUrl);
 
                 }
                 return NotFound();
