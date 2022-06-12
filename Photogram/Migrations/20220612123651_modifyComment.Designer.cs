@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Photogram;
 
@@ -11,9 +12,10 @@ using Photogram;
 namespace Photogram.Migrations
 {
     [DbContext(typeof(PhotogramDbContext))]
-    partial class PhotogramDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220612123651_modifyComment")]
+    partial class modifyComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,27 +51,6 @@ namespace Photogram.Migrations
                     b.HasIndex("PhotosId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("Photogram.Models.Followers", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("Followers");
                 });
 
             modelBuilder.Entity("Photogram.Models.Photos", b =>
@@ -174,7 +155,12 @@ namespace Photogram.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UsersId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UsersId");
 
                     b.ToTable("Users");
                 });
@@ -184,13 +170,6 @@ namespace Photogram.Migrations
                     b.HasOne("Photogram.Models.Photos", null)
                         .WithMany("Comments")
                         .HasForeignKey("PhotosId");
-                });
-
-            modelBuilder.Entity("Photogram.Models.Followers", b =>
-                {
-                    b.HasOne("Photogram.Models.Users", null)
-                        .WithMany("Followers")
-                        .HasForeignKey("UsersId");
                 });
 
             modelBuilder.Entity("Photogram.Models.Photos", b =>
@@ -220,6 +199,13 @@ namespace Photogram.Migrations
                     b.Navigation("Comment");
 
                     b.Navigation("Photo");
+                });
+
+            modelBuilder.Entity("Photogram.Models.Users", b =>
+                {
+                    b.HasOne("Photogram.Models.Users", null)
+                        .WithMany("Followers")
+                        .HasForeignKey("UsersId");
                 });
 
             modelBuilder.Entity("Photogram.Models.Photos", b =>

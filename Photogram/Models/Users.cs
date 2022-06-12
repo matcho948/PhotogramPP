@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Photogram.Models
@@ -19,8 +20,7 @@ namespace Photogram.Models
         public virtual List<Photos>? Photos { get; set; }
         [Required]
         public UserType Role { get; set; }
-        
-        public List<Users>? Followers{ get; set; }
+        public virtual List<Followers>? Followers{ get; set; }
         public enum UserType
         {
             User, Administrator
@@ -31,7 +31,6 @@ namespace Photogram.Models
             Password = password;
             Email = email;
             IsBanned = false;
-            Followers = new List<Users>();
         }
     }
 }

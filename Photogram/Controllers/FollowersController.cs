@@ -15,15 +15,14 @@ namespace Photogram.Controllers
         //user id id usera, którego ktoś chce obserwować
         // follower id user, który kogoś zaobserwował
         [HttpPost("/AddFollowers")]
-        public async Task<ActionResult> AddFollowers(int userId, int followerId)
+        public async Task<ActionResult> AddFollowers(int userId, Followers followerId)
         {
             var user = _repo.GetUserById(userId);
-            var follower = _repo.GetUserById(followerId);
-            if (user == null || follower == null)
+            if (user == null || followerId == null)
             {
                 return NotFound();
             }
-            _repo.addFollower(user, follower);
+            _repo.addFollower(user, followerId);
             return Ok();
         }
         [HttpGet("/GetFollowersList/{userId}")]
@@ -31,8 +30,8 @@ namespace Photogram.Controllers
         {
             if (userId == null)
                 return NotFound();
-            var followers = _repo.GetFollowersList(userId);
-            return Ok(followers.Followers);
+            var followers = await  _repo.GetFollowersList(userId);
+            return Ok(followers);
         }
         [HttpGet("/GetUsersFolloweredByUser/{userId}")]
         public async Task<ActionResult<List<Users>>> GetUsersFolloweredByUser(int userId)

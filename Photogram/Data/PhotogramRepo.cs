@@ -159,31 +159,39 @@ namespace Photogram.Data
             }
         }
 
-        public async Task addFollower(Users user, Users follower)
+        public async Task addFollower(Users user,Followers followerId)
         {
-            if (user != null && follower != null)
-                user.Followers.Add(follower);
+            if (user != null && followerId != null)
+            {
+                user.Followers.Add(followerId);
+            }
             await _context.SaveChangesAsync();
         }
 
-        public Users GetFollowersList(int userId)
+        public async Task<List<Users>> GetFollowersList(int userId)
         {
-           var followerList = _context.Users.Include(p => p.Followers).FirstOrDefault(p => p.Id == userId);
-           if (followerList != null)
-           {
-                followerList.Followers.ForEach(p => p.Followers = null);
-                return followerList;
-           }
-           return null;
+            var followerList = _context.Users.AsNoTracking().Include(p => p.Followers).FirstOrDefault(p => p.Id == userId);
+            if (followerList != null)
+            {
+                List<Users> followers = new List<Users>();
+                foreach(var user in followerList.Followers)
+                {
+                    var searchedUser = _context.Users.FirstOrDefault(p => p.Id == user.UserId);
+                    if(searchedUser != null)
+                        followers.Add(searchedUser);
+                }
+                return followers;
+            }
+            return null;
         }
 
         public async Task<List<Users>> GetFolloweredUsers(int userId)
         {
             List<Users> followeredUsers = new List<Users>();
-            var users = await _context.Users.Include(p => p.Followers).ToListAsync();
+            var users = await _context.Users.AsNoTracking().Include(p => p.Followers).ToListAsync();
             foreach (var user in users)
             {
-                var followered = user.Followers.FirstOrDefault(p => p.Id == userId);
+                var followered = user.Followers.FirstOrDefault(p => p.UserId == userId);
                 if (followered != null)
                 {
                     user.Followers = null;
