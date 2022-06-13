@@ -251,7 +251,7 @@ namespace Photogram.Data
                 throw new Exception("Password is too short");
             }
             Users user = GetUserById(userId);
-            user.Password = _hasher.HashPassword(user, user.Password);
+            user.Password = _hasher.HashPassword(user, password);
             await _context.SaveChangesAsync();
         }
         public int getNumberOfUsers()
