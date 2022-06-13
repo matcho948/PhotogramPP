@@ -64,7 +64,14 @@ namespace Photogram.Controllers
         {
             if(!_repo.CheckIfUserExistInDatabase(_repo.GetUserById(id)))
                 return NotFound();
-            await _repo.ChangeUserName(id, userName);
+            try
+            {
+                await _repo.ChangeUserName(id, userName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok();
         }
 
