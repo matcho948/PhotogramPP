@@ -9,6 +9,8 @@ namespace Photogram.Models
         public int Id { get; set; }
         [Required]
         public Type TypeOfReaction { get; set; }
+        [Required]
+        public int userId { get; set; }
         public enum Type
         {
             Like,Love,Sad,Excited
