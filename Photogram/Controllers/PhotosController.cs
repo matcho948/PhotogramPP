@@ -54,7 +54,7 @@ namespace Photogram.Controllers
             }
         }
         [HttpPatch("/SetProfilePhoto/{id}")]
-        public async Task<ActionResult> SetProfilePhoto([FromBody] int id)
+        public async Task<ActionResult> SetProfilePhoto(int id)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Photogram.Controllers
             }
         }
         [HttpPatch("/DeleteProfilePhoto/{id}")]
-        public async Task<ActionResult> DeleteProfilePhoto([FromBody] int id)
+        public async Task<ActionResult> DeleteProfilePhoto(int id)
         {
             try
             {
@@ -90,16 +90,57 @@ namespace Photogram.Controllers
             }
         }
         [HttpDelete("/DeletePhoto/{id}")]
-        public async Task<ActionResult> DeletePhoto([FromBody] int id)
+        public async Task<ActionResult> DeletePhoto(int id)
         {
             if (id == null)
                 return NotFound();
-
-            var photo = _repo.getPhotoById(id);
+            var photo = _repo.getPhotoToDeleteById(id);
             _repo.deletePhoto(photo);
             return Ok();
 
-            
+
+        }
+        [HttpGet("/GetProfilePhoto/{id}")]
+        public async Task<ActionResult> GetProfilePhoto(int id)
+        {
+            if (id == null)
+                return BadRequest();
+            else
+            {
+                var user = _repo.GetUserWithPhotosById(id);
+                foreach(Photos photo in user.Photos)
+                {
+                    if(photo.IsMainPhoto == true)
+                        return Ok(photo.PhotoUrl);
+
+                }
+                return NotFound();
+            }
+        }
+        [HttpGet("/GetRecomendedPhotos")]
+        public async Task<ActionResult<List<Photos>>> getRecomendedPhotos()
+        {
+            var idList = new List<int>();
+            var numberOfPhotos = _repo.getNumberOfPhotos();
+            Random random = new Random();
+            var photos = new List<Photos>();
+            if (numberOfPhotos < 20)
+                photos = _repo.GetAllPhotos().ToList();
+            else
+            {
+                while (photos.Count < 20)
+                {
+                    var id = random.Next(numberOfPhotos);
+                    if (!idList.Contains(id))
+                    {
+                        var photo = _repo.getPhotoById(id);
+                        if (photo != null)
+                            photos.Add(photo);
+                    }
+                    idList.Add(id);
+                }
+            }
+            return Ok(photos);
         }
     }
 

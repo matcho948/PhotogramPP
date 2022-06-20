@@ -1,7 +1,7 @@
 
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Photogram.Models;
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Photogram.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -137,16 +137,29 @@ namespace Photogram.Data
             _context.Update(photo);
             _context.SaveChanges();
         }
+
+        public Photos getPhotoToDeleteById(int id)
+        {
+            return _context.Photos.Include(p => p.Comments).Include(p => p.Reactions).FirstOrDefault(p => p.Id == id);
+        }
         public async Task deletePhoto(Photos photo)
         {
             if (photo != null)
             {
+                foreach (var c in photo.Comments)
+                {
+                    _context.Comments.Remove(c);
+                }
+                foreach (var r in photo.Reactions)
+                {
+                    _context.Reactions.Remove(r);
+                }
                 _context.Photos.Remove(photo);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 
-        public async Task addFollower(Users user,Followers followerId)
+        public async Task addFollower(Users user, Followers followerId)
         {
             if (user != null && followerId != null)
             {
@@ -161,10 +174,10 @@ namespace Photogram.Data
             if (followerList != null)
             {
                 List<Users> followers = new List<Users>();
-                foreach(var user in followerList.Followers)
+                foreach (var user in followerList.Followers)
                 {
                     var searchedUser = _context.Users.FirstOrDefault(p => p.Id == user.UserId);
-                    if(searchedUser != null)
+                    if (searchedUser != null)
                         followers.Add(searchedUser);
                 }
                 return followers;
@@ -238,7 +251,7 @@ namespace Photogram.Data
                 throw new Exception("Password is too short");
             }
             Users user = GetUserById(userId);
-            user.Password = _hasher.HashPassword(user, user.Password);
+            user.Password = _hasher.HashPassword(user, password);
             await _context.SaveChangesAsync();
         }
 
@@ -259,6 +272,31 @@ namespace Photogram.Data
                 return notifications;
             return null;
 
+        public int getNumberOfUsers()
+        {
+            return _context.Users.Count();
+        }
+        public int getNumberOfPhotos()
+        {
+            return _context.Photos.Count();
+        }
+
+        public List<Users> GetUsersByName(string name)
+        {
+            var users = _context.Users.Where(u => u.Name.ToLower().StartsWith(name.ToLower())).ToList();
+            return users;
+        }
+
+        public List<Users> SearchUsers(string name)
+        {
+            if (name == null)
+                throw new Exception("Name is null");
+            var users = GetUsersByName(name);
+            if (!users.Any())
+                throw new Exception("No matching users");
+            if (users.Count > 5)
+                users.RemoveRange(5, users.Count() - 5);
+            return users;
         }
     }
 }

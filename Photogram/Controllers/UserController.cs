@@ -64,7 +64,14 @@ namespace Photogram.Controllers
         {
             if(!_repo.CheckIfUserExistInDatabase(_repo.GetUserById(id)))
                 return NotFound();
-            await _repo.ChangeUserName(id, userName);
+            try
+            {
+                await _repo.ChangeUserName(id, userName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok();
         }
 
@@ -99,6 +106,45 @@ namespace Photogram.Controllers
             }
             return Ok();
         }
+        [HttpGet("/GetRecomendedUsers")]
+        public async Task<ActionResult<List<Users>>> getRecomendedUsers()
+        {
+            var idList = new List<int>();
+            var numberOfUsers = _repo.getNumberOfUsers();
+            Random random = new Random();
+            var users = new List<Users>();
+            if (numberOfUsers < 20)
+                users = _repo.GetAllUsers().ToList();
+            else
+            {
+                while (users.Count < 20)
+                {
+                    var id = random.Next(numberOfUsers);
+                    if (!idList.Contains(id))
+                    {
+                        var user = _repo.GetUserById(id);
+                        if (user != null)
+                            users.Add(user);
+                    }
+                    idList.Add(id);
+                }
+            }
+            return Ok(users);
+        }
 
+        [HttpGet("/SearchUser")]
+        public async Task<ActionResult<List<Users>>> SearchUser(string username)
+        {
+            List<Users> users = new();
+            try
+            {
+                users = _repo.SearchUsers(username);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(users);
+        }
     }
 }
