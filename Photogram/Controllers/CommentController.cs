@@ -8,9 +8,11 @@ namespace Photogram.Controllers
     public class CommentController : ControllerBase
     {
         private readonly IPhotosRepo _repo;
-        public CommentController(IPhotosRepo repo)
+        private readonly IPhotogramRepo _photogramRepo;
+        public CommentController(IPhotosRepo repo, IPhotogramRepo photogramRepo)
         {
             _repo = repo;
+            _photogramRepo = photogramRepo; 
         }
 
         [HttpGet("/GetAllCommentsForPhoto/{photoId}", Name ="GetComments")]
@@ -25,6 +27,10 @@ namespace Photogram.Controllers
         [HttpPost("AddCommentToPhoto/{photoId}")]
         public async Task<ActionResult> AddCommentToPhoto(Comments comment,int photoId)
         {
+            var user = await _repo.FindUserByPhotoId(photoId);
+            var photo = _photogramRepo.getPhotoById(photoId);
+            var notification = new Notifications(user, photo, $"{comment.UserName} commented your photo!");
+            await _photogramRepo.AddNotification(notification);
             await _repo.AddCommentToPhoto(comment, photoId);
             return Ok();
         }

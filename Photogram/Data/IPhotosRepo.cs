@@ -11,5 +11,6 @@ namespace Photogram.Data
         public Task DeleteCommentById(int photoId, int commentId);
         public Task DeleteReactionById(int photoId, int reactionId);
         public Task<int> CountFollowers(int userId);
+        public Task<Users> FindUserByPhotoId(int photoId);
     }
 }

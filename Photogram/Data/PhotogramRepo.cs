@@ -254,6 +254,24 @@ namespace Photogram.Data
             user.Password = _hasher.HashPassword(user, password);
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddNotification(Notifications notification)
+        {
+            if (notification != null)
+            {
+                await _context.Notifications.AddAsync(notification);
+                await _context.SaveChangesAsync();
+
+            }
+        }
+
+        public async Task<List<Notifications>> GetAllNotificationForUser(int userId)
+        {
+            var notifications = await _context.Notifications.Include(p => p.User).Include(p => p.Photo).Where(p => p.User.Id == userId).ToListAsync();
+            if (notifications.Any())
+                return notifications;
+            return null;
+
         public int getNumberOfUsers()
         {
             return _context.Users.Count();

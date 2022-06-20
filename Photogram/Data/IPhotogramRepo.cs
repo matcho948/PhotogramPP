@@ -27,6 +27,8 @@ namespace Photogram.Data
         public Task ChangeUserName(int userId, string username);
         public Task ChangePassword(int userId, string password);
         public Task ChangeEmail(int userId, string email);
+        public Task AddNotification(Notifications notification);
+        public Task<List<Notifications>> GetAllNotificationForUser(int userId);
         public int getNumberOfUsers();
         public int getNumberOfPhotos();
         public List<Users> SearchUsers(string username);

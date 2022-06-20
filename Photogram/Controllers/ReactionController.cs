@@ -8,10 +8,13 @@ namespace Photogram.Controllers
     public class ReactionController : ControllerBase
     {
         private readonly IPhotosRepo _repo;
-        public ReactionController(IPhotosRepo repo)
+        private readonly IPhotogramRepo _photogramRepo;
+        public ReactionController(IPhotosRepo repo, IPhotogramRepo photogramRepo)
         {
             _repo = repo;
+            _photogramRepo = photogramRepo; 
         }
+
         [HttpGet("/GetAllReactionsForPhoto/{photoId}", Name = "GetReactions")]
         public async Task<ActionResult<List<Reactions>>> GetAllReactionsForPhoto(int photoId)
         {
@@ -23,6 +26,10 @@ namespace Photogram.Controllers
         [HttpPost("AddReactionToPhoto/{photoId}")]
         public async Task<ActionResult> AddReactionToPhoto(Reactions reaction, int photoId)
         {
+            var user = await _repo.FindUserByPhotoId(photoId);
+            var photo = _photogramRepo.getPhotoById(photoId);
+            var notification = new Notifications(user,photo,"Someone reacted to your photo!");
+            await _photogramRepo.AddNotification(notification);
             await _repo.AddReactionToPhoto(reaction, photoId);
             return Ok();
         }
