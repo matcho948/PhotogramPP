@@ -24,7 +24,9 @@ namespace Photogram.Controllers
             {
                 return NotFound();
             }
-            _repo.addFollower(user, followerId);
+            var notification = new Notifications(user, null, $"{user.Name} follow your profile!");
+            await _repo.AddNotification(notification);
+            await _repo.addFollower(user, followerId);
             return Ok();
         }
         [HttpGet("/GetFollowersList/{userId}")]

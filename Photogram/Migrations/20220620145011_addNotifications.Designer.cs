@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Photogram;
 
@@ -11,9 +12,10 @@ using Photogram;
 namespace Photogram.Migrations
 {
     [DbContext(typeof(PhotogramDbContext))]
-    partial class PhotogramDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220620145011_addNotifications")]
+    partial class addNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,36 +72,6 @@ namespace Photogram.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("Followers");
-                });
-
-            modelBuilder.Entity("Photogram.Models.Notifications", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("PhotoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PhotoId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Photogram.Models.Photos", b =>
@@ -224,21 +196,6 @@ namespace Photogram.Migrations
                     b.HasOne("Photogram.Models.Users", null)
                         .WithMany("Followers")
                         .HasForeignKey("UsersId");
-                });
-
-            modelBuilder.Entity("Photogram.Models.Notifications", b =>
-                {
-                    b.HasOne("Photogram.Models.Photos", "Photo")
-                        .WithMany()
-                        .HasForeignKey("PhotoId");
-
-                    b.HasOne("Photogram.Models.Users", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Photo");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Photogram.Models.Photos", b =>

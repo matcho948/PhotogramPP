@@ -14,5 +14,6 @@ namespace Photogram
         public DbSet<Reactions> Reactions { get; set; }
         public DbSet<Reports> Reports { get; set; }
         public DbSet<Users> Users { get; set; }
+        public DbSet<Notifications> Notifications { get; set; }
     }
 }

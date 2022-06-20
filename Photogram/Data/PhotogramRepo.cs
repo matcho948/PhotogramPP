@@ -233,13 +233,32 @@ namespace Photogram.Data
 
         public async Task ChangePassword(int userId, string password)
         {
-            if(password.Length < 8)
+            if (password.Length < 8)
             {
                 throw new Exception("Password is too short");
             }
             Users user = GetUserById(userId);
             user.Password = _hasher.HashPassword(user, user.Password);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task AddNotification(Notifications notification)
+        {
+            if (notification != null)
+            {
+                await _context.Notifications.AddAsync(notification);
+                await _context.SaveChangesAsync();
+
+            }
+        }
+
+        public async Task<List<Notifications>> GetAllNotificationForUser(int userId)
+        {
+            var notifications = await _context.Notifications.Include(p => p.User).Include(p => p.Photo).Where(p => p.User.Id == userId).ToListAsync();
+            if (notifications.Any())
+                return notifications;
+            return null;
+
         }
     }
 }

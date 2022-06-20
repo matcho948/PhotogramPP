@@ -73,6 +73,19 @@ namespace Photogram.Data
             }
         }
 
+        public async Task<Users> FindUserByPhotoId(int photoId)
+        {
+            var users = await _context.Users.Include(p => p.Photos).ToListAsync();
+            foreach(var user in users)
+            {
+                if (user.Photos.Any(p => p.Id == photoId))
+                {
+                    return(await _context.Users.FirstOrDefaultAsync(p => p.Id == user.Id));
+                }
+            }
+            return null;
+        }
+
         public async Task<List<Comments>> GetAllCommentsByPhotoId(int photoId)
         {
             var photo = await _context.Photos.Where(p => p.Id == photoId).Include(p => p.Comments).FirstOrDefaultAsync();
