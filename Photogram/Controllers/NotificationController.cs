@@ -28,5 +28,19 @@ namespace Photogram.Controllers
             }
             return BadRequest();
 ;        }
+
+        [HttpDelete("/DeleteNotification/{id}")]
+        public async Task<ActionResult> DeleteNotification(int id)
+        {
+            try
+            {
+                await _repo.DeleteNotification(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok();
+        }
     }
 }

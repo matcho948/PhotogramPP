@@ -28,7 +28,8 @@ namespace Photogram.Controllers
         {
             var user = await _repo.FindUserByPhotoId(photoId);
             var photo = _photogramRepo.getPhotoById(photoId);
-            var notification = new Notifications(user,photo,"Someone reacted to your photo!");
+            var user2 = _photogramRepo.GetUserById(reaction.userId);
+            var notification = new Notifications(user,photo,$"{user2.Name} reacted to your photo!");
             await _photogramRepo.AddNotification(notification);
             await _repo.AddReactionToPhoto(reaction, photoId);
             return Ok();

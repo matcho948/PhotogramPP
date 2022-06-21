@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Photogram.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Photogram.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -271,6 +270,7 @@ namespace Photogram.Data
             if (notifications.Any())
                 return notifications;
             return null;
+        }
 
         public int getNumberOfUsers()
         {
@@ -298,5 +298,16 @@ namespace Photogram.Data
                 users.RemoveRange(5, users.Count() - 5);
             return users;
         }
+
+        public async Task DeleteNotification(int id)
+        {
+            var notification = _context.Notifications.FirstOrDefault(n => n.Id == id);
+            if (notification != null)
+            {
+                _context.Notifications.Remove(notification);
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }
