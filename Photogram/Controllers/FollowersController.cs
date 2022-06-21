@@ -20,11 +20,12 @@ namespace Photogram.Controllers
         public async Task<ActionResult> AddFollowers(int userId, Followers followerId)
         {
             var user = _repo.GetUserById(userId);
+            var follower = _repo.GetUserById(followerId.UserId);
             if (user == null || followerId == null)
             {
                 return NotFound();
             }
-            var notification = new Notifications(user, null, $"{user.Name} follow your profile!");
+            var notification = new Notifications(user, null, $"{follower.Name} follow your profile!");
             await _repo.AddNotification(notification);
             await _repo.addFollower(user, followerId);
             return Ok();
