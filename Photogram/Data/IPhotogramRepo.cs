@@ -23,7 +23,7 @@ namespace Photogram.Data
         public Task addFollower(Users user, Followers followerId);
         public Task<List<Users>> GetFollowersList(int userId);
         public Task<List<Users>> GetFolloweredUsers(int userId);
-        Task DeleteNotification(int id);
+        public Task DeleteNotification(int id);
         public Users getUserByPhotoId(int photoId);
         public Task ChangeUserName(int userId, string username);
         public Task ChangePassword(int userId, string password);
@@ -33,5 +33,6 @@ namespace Photogram.Data
         public int getNumberOfUsers();
         public int getNumberOfPhotos();
         public List<Users> SearchUsers(string username);
+        public Task DeleteFollower(Users user, int followerid);
     }
 }

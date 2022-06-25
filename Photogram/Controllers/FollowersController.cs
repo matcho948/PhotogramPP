@@ -30,6 +30,27 @@ namespace Photogram.Controllers
             await _repo.addFollower(user, followerId);
             return Ok();
         }
+        
+        [HttpDelete("/RemoveFollower")]
+        public async Task<ActionResult> RemoveFollower(int userId, int followerId)
+        {
+            var user = _repo.GetUserById(userId);
+            
+            if (user == null || followerId == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _repo.DeleteFollower(user, followerId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok();
+        }
+
         [HttpGet("/GetFollowersList/{userId}")]
         public async Task<ActionResult<List<Users>>> GetFollowersList(int userId)
         {

@@ -167,6 +167,16 @@ namespace Photogram.Data
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteFollower(Users user, int followerid)
+        {
+            if (user != null && followerid != null)
+            {
+                var follower = user.Followers.FirstOrDefault(f => f.UserId == followerid);
+                user.Followers.Remove(follower);
+            }
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<Users>> GetFollowersList(int userId)
         {
             var followerList = _context.Users.AsNoTracking().Include(p => p.Followers).FirstOrDefault(p => p.Id == userId);
