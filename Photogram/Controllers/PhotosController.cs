@@ -142,6 +142,25 @@ namespace Photogram.Controllers
             }
             return Ok(photos);
         }
+
+        [HttpGet("/GetFolloweredUsersPhotos")]
+        public async Task<ActionResult<List<Photos>>> GetFolloweredUsersPhotos(int userId)
+        {
+            if(_repo.GetUserById == null)
+            {
+                return NotFound();
+            }
+            var photos = new List<Photos>();
+            try
+            {
+               photos = await _repo.GetFolloweredUsersPhotos(userId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(photos);
+        }
     }
 
 }

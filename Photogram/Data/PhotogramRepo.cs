@@ -209,6 +209,27 @@ namespace Photogram.Data
             }
             return followeredUsers;
         }
+
+        public async Task<List<Photos>> GetFolloweredUsersPhotos(int userId)
+        {
+            var followeredUsers = await GetFolloweredUsers(userId);
+            var followerdUsersWithPhotos = new List<Users>();
+            var photos = new List<Photos>();
+            foreach (var user in followeredUsers)
+            {
+                followerdUsersWithPhotos.Add(GetUserWithPhotosById(user.Id));
+            }
+            foreach (var user in followerdUsersWithPhotos)
+            {
+                foreach (var photo in user.Photos)
+                {
+                    photos.Add(photo);
+                }
+            }
+            photos.OrderBy(photo => photo.Id).Take(20).ToList();
+            return photos;
+        }
+
         public Users getUserByPhotoId(int photoId)
         {
             var users = GetAllUsers();

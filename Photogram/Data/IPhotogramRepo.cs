@@ -34,5 +34,6 @@ namespace Photogram.Data
         public int getNumberOfPhotos();
         public List<Users> SearchUsers(string username);
         public Task DeleteFollower(Users user, int followerid);
+        public Task<List<Photos>> GetFolloweredUsersPhotos(int userId);
     }
 }
