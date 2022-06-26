@@ -226,7 +226,7 @@ namespace Photogram.Data
                     photos.Add(photo);
                 }
             }
-            photos.OrderBy(photo => photo.Id).Take(20).ToList();
+            photos = photos.OrderByDescending(photo => photo.Id).Take(20).ToList();
             return photos;
         }
 
