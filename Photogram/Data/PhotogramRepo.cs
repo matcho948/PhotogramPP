@@ -212,10 +212,10 @@ namespace Photogram.Data
 
         public async Task<List<Photos>> GetFolloweredUsersPhotos(int userId)
         {
-            var followeredUsers = await GetFolloweredUsers(userId);
+            var followeredUsers = await GetFollowersList(userId);
             var followerdUsersWithPhotos = new List<Users>();
             var photos = new List<Photos>();
-            foreach (var user in followeredUsers)
+            foreach (var user in followeredUsers.Distinct())
             {
                 followerdUsersWithPhotos.Add(GetUserWithPhotosById(user.Id));
             }
